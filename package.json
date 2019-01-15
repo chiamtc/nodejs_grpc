@@ -4,8 +4,9 @@
   "description": "grpc implementation using nodejs for both server and client",
   "main": "server/index.js",
   "dependencies": {
+    "@grpc/proto-loader": "^0.3.0",
     "bluebird": "^3.5.1",
-    "grpc": "^1.9.1",
+    "grpc": "^1.17.0",
     "mongoose": "^4.4.3"
   },
   "devDependencies": {},

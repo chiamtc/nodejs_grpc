@@ -1,50 +1,64 @@
 const grpc = require('grpc');
+const path = require('path')
 global.Mongoose = require('mongoose');
 Mongoose.connect('mongodb://localhost/grpc');
-
-const proto = grpc.load('proto/employees.proto');
+var protoLoader = require('@grpc/proto-loader');
+var packageDefinition = protoLoader.loadSync(
+    path.join(__dirname + '/../proto/employees.proto'),
+    {keepCase: true,
+        longs: String,
+        enums: String,
+        defaults: true,
+        oneofs: true
+    });
+const proto = grpc.loadPackageDefinition(packageDefinition).employees;
 const server = new grpc.Server();
-const employeeServices = require('../db/employees')
+const employeeServices = require('../db/employees');
+const employeeModel = require("../models/employee")
 
 //define the callable methods that correspond to the methods defined in the protofile
-server.addService(proto.employees.EmployeesService.service, {
+server.addService(proto.EmployeesService.service, {
 
-	List(call, callback){
-		employeeServices.list(callback);
-	},
+    List(call, callback) {
+        let allEmp = new employeeServices({});
+        employeeModel.find({}, (err,res)=>{
+            if(err) callback(err)
+            callback(null, {employees:res})
+        })
+    },
 
-	get(call, callback){
-		let payload = {
-			criteria: {
-				employee_id: call.request.employee_id
-			},
-			projections: {
-				_id : 0, __v : 0
-			},
-			options: {
-				lean: true
-			}
-		};
-		let emp = new employeeServices(payload);
-		emp.fetch(callback);
-	},
+    get(call, callback) {
+        let payload = {
+            criteria: {
+                employee_id: call.request.employee_id
+            },
+            projections: {
+                _id: 0, __v: 0
+            },
+            options: {
+                lean: true
+            }
+        };
+        let emp = new employeeServices(payload);
+        emp.fetch(callback);
+    },
 
-	Insert(call, callback){
-		let emp = new employeeServices({
-			employee_id: call.request.employee_id,
-			name: call.request.name,
-			email: call.request.email,
-		});
-		emp.add(callback);
-	},
+    Insert(call, callback) {
+        let emp = new employeeServices({
+            employee_id: call.request.employee_id,
+            name: call.request.name,
+            email: call.request.email,
+        });
+        emp.add(callback);
+    },
 
-	remove(callback){
-		const criteria = {
-			employee_id: call.request.employee_id,
-		};
-		let emp = new employeeServices(criteria);
-		emp.remove(criteria, callback);
-	},
+    remove(call, callback) {
+        const criteria = {
+            employee_id: call.request.employee_id,
+        };
+        let emp = new employeeServices(criteria);
+        emp.remove(callback);
+    },
 });
 
 //Specify the IP and and port to start the grpc Server, no SSL in test environment

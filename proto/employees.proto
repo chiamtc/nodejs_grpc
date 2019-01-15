@@ -5,9 +5,9 @@ package employees; //Optional: unique package name.
 //Service. define the methods that the grpc server can expose to the client.
 service EmployeesService {
   rpc List (Empty) returns (EmployeeList);
-  rpc Insert (Employee) returns (Empty);
-  rpc Get (EmployeeId) returns (EmployeeList);
-  rpc Remove (EmployeeId) returns (Empty);
+  rpc Insert (Employee) returns (Employee);
+  rpc Get (EmployeeId) returns (Employee);
+  rpc Remove (EmployeeId) returns (Employee);
 }
 
 // Message Type definition for an Employee.
@@ -18,7 +18,7 @@ message Employee {
 }
 
 message EmployeeList {
-  repeated Employee employee = 1;
+  repeated Employee employees = 1;
 }
 
 message EmployeeId {
@@ -26,3 +26,7 @@ message EmployeeId {
 }
 
 message Empty {}
+
+message Res {
+  string response = 1;
+}
