@@ -16,6 +16,9 @@ service EmployeesService {
     rpc Update (EmployeeUpdate) returns (Employee) {
     }
 
+    rpc Watch (Empty) returns (stream Employee) {
+    }
+
 }
 
 // Message Type definition for an Employee.

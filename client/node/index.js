@@ -28,7 +28,17 @@ call.on('end', function(end){
     console.log('ended',end)
 })*/
 
-client.update({
+
+/*client.List({}, (error, response) => {
+	if (!error) {
+		console.log("Response : ", response)
+	}
+	else {
+		console.log("Error:", error.message);
+	}
+});*/
+
+/*client.update({
     employee_id: 418880,
     field: ['name','email'],
     emp:{name:'asd',email:'total@ta.com'}
@@ -39,16 +49,9 @@ client.update({
     else {
         console.log("Error:", err.message);
     }
-})
+})*/
 
-/*client.List({}, (error, response) => {
-	if (!error) {
-		console.log("Response : ", response)
-	}
-	else {
-		console.log("Error:", error.message);
-	}
-});*/
+
 
 /*client.get({
 	employee_id: 695879
@@ -75,11 +78,17 @@ client.update({
 		console.log("Error:", error.message);
 	}
 });*/
+const watch = client.Watch({});
+watch.on('data', function(newly){
+    console.log('newly',newly)
+})
 
-/*client.Insert({
+
+setTimeout(()=>{
+client.Insert({
     employee_id: parseInt(Math.random() * 1000000),
-    name: "Amulya Kashyap",
-    email: "bruh@gmail.com"
+    name: "tat cheng",
+    email: "tat.c@gmail.com"
 }, (error, response) => {
     if (
         !error
@@ -89,4 +98,7 @@ client.update({
     else {
         console.log("Error:", error);
     }
-});*/
+});
+},5000);
+
+

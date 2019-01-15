@@ -16,7 +16,9 @@ const proto = grpc.loadPackageDefinition(packageDefinition).employees;
 const server = new grpc.Server();
 const employeeServices = require('../db/employees');
 const employeeModel = require("../models/employee")
+const events = require('events')
 
+var bookStream = new events.EventEmitter();
 //define the callable methods that correspond to the methods defined in the protofile
 server.addService(proto.EmployeesService.service, {
 
@@ -27,8 +29,21 @@ server.addService(proto.EmployeesService.service, {
             if(err) callback(err)
             callback(null, {employees:res})
         })
+
         /* stream
          allEmp.list(call)*/
+    },
+
+    Watch(call,callback){
+        bookStream.on('new_emp',(res)=>{
+            console.log('res',res)
+            let newEmp = new employeeServices(res);
+            employeeModel.findOne({employee_id:res}, (err,res)=>{
+                console.log('found?',res)
+                if(err) call.write(err);
+                call.write(res);
+            })
+        })
     },
 
     get(call, callback) {
@@ -67,6 +82,7 @@ server.addService(proto.EmployeesService.service, {
             email: call.request.email,
         });
         emp.add(callback);
+        bookStream.emit('new_emp', call.request.employee_id)
     },
 
     remove(call, callback) {
