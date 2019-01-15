@@ -26,6 +26,11 @@ let Employee = class {
 
     }
 
+    update(cb){
+        console.log('payload',this.payload)
+        employeeModel.findOneAndUpdate(this.payload.id, this.payload.update, {new:true}, cb);
+    }
+
     add(cb) {
         //new employeeModel(this.payload).save(cb);
         employeeModel.create(this.payload, cb)

@@ -28,14 +28,27 @@ call.on('end', function(end){
     console.log('ended',end)
 })*/
 
-client.List({}, (error, response) => {
+client.update({
+    employee_id: 418880,
+    field: ['name','email'],
+    emp:{name:'asd',email:'total@ta.com'}
+}, (err, res) => {
+    if (!err) {
+        console.log("Response : ", res)
+    }
+    else {
+        console.log("Error:", err.message);
+    }
+})
+
+/*client.List({}, (error, response) => {
 	if (!error) {
 		console.log("Response : ", response)
 	}
 	else {
 		console.log("Error:", error.message);
 	}
-});
+});*/
 
 /*client.get({
 	employee_id: 695879

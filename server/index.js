@@ -47,6 +47,19 @@ server.addService(proto.EmployeesService.service, {
         emp.fetch(callback);
     },
 
+    update(call,callback){
+        console.log('call',call)
+        let payload={
+            id:{
+                employee_id:call.request.employee_id
+            },
+            fields:call.request.field,
+            update: {...call.request.emp,employee_id:call.request.employee_id}
+        }
+        let emp = new employeeServices(payload);
+        emp.update(callback)
+    },
+
     Insert(call, callback) {
         let emp = new employeeServices({
             employee_id: call.request.employee_id,
