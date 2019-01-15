@@ -17,6 +17,17 @@ const proto = grpc.loadPackageDefinition(packageDefinition).employees;
 //Create a new client instance that binds to the IP and port of the grpc server.
 const client = new proto.EmployeesService('localhost:50050', grpc.credentials.createInsecure());
 
+/*
+streaming call
+const call = client.List({});
+call.on('data',function(a){
+    console.log('a',a)
+})
+
+call.on('end', function(end){
+    console.log('ended',end)
+})*/
+
 client.List({}, (error, response) => {
 	if (!error) {
 		console.log("Response : ", response)

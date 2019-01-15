@@ -5,7 +5,8 @@ Mongoose.connect('mongodb://localhost/grpc');
 var protoLoader = require('@grpc/proto-loader');
 var packageDefinition = protoLoader.loadSync(
     path.join(__dirname + '/../proto/employees.proto'),
-    {keepCase: true,
+    {
+        keepCase: true,
         longs: String,
         enums: String,
         defaults: true,
@@ -20,11 +21,14 @@ const employeeModel = require("../models/employee")
 server.addService(proto.EmployeesService.service, {
 
     List(call, callback) {
+        //normla one-to-one call
         let allEmp = new employeeServices({});
         employeeModel.find({}, (err,res)=>{
             if(err) callback(err)
             callback(null, {employees:res})
         })
+        /* stream
+         allEmp.list(call)*/
     },
 
     get(call, callback) {

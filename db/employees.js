@@ -1,4 +1,5 @@
 let employeeModel = require('../models/employee')
+const _ = require('lodash')
 let Employee = class {
     constructor(payload) {
         this.payload = payload;
@@ -14,6 +15,15 @@ let Employee = class {
             lean: true
         };
         employeeModel.find(criteria, projections, options, cb);
+      /*Using stream , employees.proto has to return as stream
+
+        employeeModel.find(criteria, projections, options, (err,res)=>{
+            if(err) cb.write(err)
+            _.each(res, (res)=>{
+                cb.write(res)
+            })
+        });*/
+
     }
 
     add(cb) {
