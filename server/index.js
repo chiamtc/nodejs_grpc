@@ -25,22 +25,21 @@ server.addService(proto.EmployeesService.service, {
     List(call, callback) {
         //normla one-to-one call
         let allEmp = new employeeServices({});
-        employeeModel.find({}, (err,res)=>{
-            if(err) callback(err)
-            callback(null, {employees:res})
+        employeeModel.find({}, (err, res) => {
+            if (err) callback(err)
+            callback(null, {employees: res})
         })
 
         /* stream
          allEmp.list(call)*/
     },
 
-    Watch(call,callback){
-        bookStream.on('new_emp',(res)=>{
-            console.log('res',res)
+    Watch(call) {
+        bookStream.on('new_emp', (res) => {
             let newEmp = new employeeServices(res);
-            employeeModel.findOne({employee_id:res}, (err,res)=>{
-                console.log('found?',res)
-                if(err) call.write(err);
+            employeeModel.findOne({employee_id: res}, (err, res) => {
+                console.log('found?', res)
+                if (err) call.write(err);
                 call.write(res);
             })
         })
@@ -62,14 +61,14 @@ server.addService(proto.EmployeesService.service, {
         emp.fetch(callback);
     },
 
-    update(call,callback){
-        console.log('call',call)
-        let payload={
-            id:{
-                employee_id:call.request.employee_id
+    update(call, callback) {
+        console.log('call', call)
+        let payload = {
+            id: {
+                employee_id: call.request.employee_id
             },
-            fields:call.request.field,
-            update: {...call.request.emp,employee_id:call.request.employee_id}
+            fields: call.request.field,
+            update: {...call.request.emp, employee_id: call.request.employee_id}
         }
         let emp = new employeeServices(payload);
         emp.update(callback)
