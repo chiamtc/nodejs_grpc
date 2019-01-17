@@ -3,7 +3,7 @@ syntax = "proto3"; //Specify proto3 version.
 package employees; //Optional: unique package name.
 
 //Service. define the methods that the grpc server can expose to the client.
-service EmployeesService {
+service Employees{
     rpc List (Empty) returns (EmployeeList) {
     }
     //rpc List (Empty) returns (stream Employee){}
@@ -20,6 +20,8 @@ service EmployeesService {
     }
 
 }
+
+
 
 // Message Type definition for an Employee.
 message Employee {
