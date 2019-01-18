@@ -15,7 +15,21 @@ var packageDefinition = protoLoader.loadSync(
 const proto = grpc.loadPackageDefinition(packageDefinition).employees;
 
 //Create a new client instance that binds to the IP and port of the grpc server.
-const client = new proto.EmployeesService('localhost:50050', grpc.credentials.createInsecure());
+
+//1. ? src: https://grpc.io/docs/guides/auth.html#with-server-authentication-ssltls-6
+// const ssl_cert = grpc.credentials.createSsl(root_certs_path)
+
+//2. ? src :https://github.com/jSherz/node-grpc-mutual-auth-example/blob/master/server.js
+//      blogpost: https://jsherz.com/grpc/node/nodejs/mutual/authentication/ssl/2017/10/27/grpc-node-with-mutual-auth.html
+/*const ssl_cert = grpc.ServerCredentials.createSsl({
+    rootCerts: fs.readFileSync(path.join(process.cwd(), "server-certs", "Snazzy_Microservices.crt")),
+    keyCertPairs: {
+        privateKey: fs.readFileSync(path.join(process.cwd(), "server-certs", "login.services.widgets.inc.key")),
+        certChain: fs.readFileSync(path.join(process.cwd(), "server-certs", "login.services.widgets.inc.crt"))
+    },
+    checkClientCertificate: true
+})*/
+const client = new proto.Employees('localhost:8080', grpc.credentials.createInsecure());
 
 /*
 streaming call
@@ -84,7 +98,14 @@ watch.on('data', function(newly){
 })
 
 
-setTimeout(()=>{
+/*
+client.List({}, (err,res)=>{
+    console.log('err',err)
+    console.log('res',res)
+});
+*/
+
+/*setTimeout(()=>{
 client.Insert({
     employee_id: parseInt(Math.random() * 1000000),
     name: "tat cheng",
@@ -99,6 +120,6 @@ client.Insert({
         console.log("Error:", error);
     }
 });
-},5000);
+},5000);*/
 
 

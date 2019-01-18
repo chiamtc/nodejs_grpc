@@ -16,7 +16,7 @@ service Employees{
     rpc Update (EmployeeUpdate) returns (Employee) {
     }
 
-    rpc Watch (Empty) returns (stream Employee) {
+    rpc Watch (Empty) returns (stream EmployeeList) {
     }
 
 }

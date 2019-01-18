@@ -1,5 +1,6 @@
 const grpc = require('grpc');
 const path = require('path')
+const _ = require('lodash')
 global.Mongoose = require('mongoose');
 Mongoose.connect('mongodb://localhost/grpc');
 var protoLoader = require('@grpc/proto-loader');
@@ -30,6 +31,7 @@ function getServer() {
             //normla one-to-one call
             let allEmp = new employeeServices({});
             employeeModel.find({}, (err, res) => {
+                console.log('res',res)
                 if (err) callback(err)
                 callback(null, {employees: res})
             })
@@ -39,13 +41,25 @@ function getServer() {
         },
 
         Watch(call) {
+            let allEmp = new employeeServices({});
+            console.log('??')
+            employeeModel.find({}, (err, res) => {
+                //console.log('res',res)
+                if (err) call.write(err)
+
+                call.write({employees:res})
+            })
+
             bookStream.on('new_emp', (res) => {
                 let newEmp = new employeeServices(res);
-                employeeModel.findOne({employee_id: res}, (err, res) => {
-                    console.log('found?', res)
+                employeeModel.find({}, (err, res) => {
+
                     if (err) call.write(err);
-                    call.write(res);
-                })
+                    call.write({employees:res});
+                })/*.then(() => {
+                    call.end();
+                })*/
+
             })
         },
 
