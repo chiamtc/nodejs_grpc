@@ -15,6 +15,7 @@ static_resources:
           codec_type: auto
           stat_prefix: ingress_http
           stream_idle_timeout: 0s
+          request_timeout: 0s
           route_config:
             name: local_route
             virtual_hosts:
@@ -41,6 +42,16 @@ static_resources:
   - name: greeter_service
     connect_timeout: 0.25s
     type: logical_dns
+    common_http_protocol_options:
+        idle_timeout: 7200s
     http2_protocol_options: {}
     lb_policy: round_robin
-    hosts: [{ socket_address: { address: host.docker.internal , port_value: 9090 }}]
+    hosts:
+    - socket_address:
+        address: host.docker.internal
+        port_value: 9090
+    upstream_connection_options:
+        tcp_keepalive:
+          keepalive_probes: 1
+          keepalive_time: 10
+          keepalive_interval: 10

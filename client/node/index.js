@@ -3,6 +3,8 @@ const path = require('path')
 const protoPath = require('path').join(__dirname, '../..', 'proto');
 //console.log("proto path : ", protoPath)
 var protoLoader = require('@grpc/proto-loader');
+var jwt = require('jsonwebtoken');
+var event = require('events');
 var packageDefinition = protoLoader.loadSync(
     path.join(__dirname + '/../../proto/employees.proto'),
     {
@@ -14,6 +16,19 @@ var packageDefinition = protoLoader.loadSync(
     });
 const proto = grpc.loadPackageDefinition(packageDefinition).employees;
 
+var packageDefinitionUser = protoLoader.loadSync(
+    path.join(__dirname + '/../../proto/user.proto'),
+    {
+        keepCase: true,
+        longs: String,
+        enums: String,
+        defaults: true,
+        oneofs: true
+    });
+const userProto = grpc.loadPackageDefinition(packageDefinitionUser).users;
+
+
+var loginStream = new event.EventEmitter();
 //Create a new client instance that binds to the IP and port of the grpc server.
 
 //1. ? src: https://grpc.io/docs/guides/auth.html#with-server-authentication-ssltls-6
@@ -30,6 +45,31 @@ const proto = grpc.loadPackageDefinition(packageDefinition).employees;
     checkClientCertificate: true
 })*/
 const client = new proto.Employees('localhost:8080', grpc.credentials.createInsecure());
+const userClient = new userProto.Users('localhost:8080', grpc.credentials.createInsecure());
+
+
+/*userClient.register({email: 'test@test.com', password:'1234'},(error,response)=>{
+    console.log('err',error)
+    console.log('res',response)
+})*/
+var loginin = userClient.login({email: 'test@test.com', password: '1234'}, (error, response) => {
+
+
+})
+
+loginin.on('metadata', (data) => {
+    //console.log('metadata',data._internal_repr.token[0])
+    loginStream.emit('watch_login', data._internal_repr.token[0])
+})
+
+loginStream.on('watch_login', (res) => {
+    var meta = new grpc.Metadata();
+    meta.add('token', res)
+    userClient.watchSession({}, meta, (err, res) => {
+        console.log('watch res', res)
+    })
+})
+
 
 /*
 streaming call
@@ -66,7 +106,6 @@ call.on('end', function(end){
 })*/
 
 
-
 /*client.get({
 	employee_id: 695879
 }, (error, response) => {
@@ -92,10 +131,12 @@ call.on('end', function(end){
 		console.log("Error:", error.message);
 	}
 });*/
+/*
 const watch = client.Watch({});
-watch.on('data', function(newly){
-    console.log('newly',newly)
+watch.on('data', function (newly) {
+    console.log('newly', newly)
 })
+*/
 
 
 /*
