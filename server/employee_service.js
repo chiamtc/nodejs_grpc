@@ -3,6 +3,7 @@ const employeeModel = require("../models/employee");
 const events = require('events');
 const path = require('path')
 const grpc = require('grpc');
+const jwt = require('jsonwebtoken');
 var protoLoader = require('@grpc/proto-loader');
 var packageDefinition = protoLoader.loadSync(
     path.join(__dirname + '/../proto/employees.proto'),
@@ -22,6 +23,7 @@ function allServices() {
 
         List(call, callback) {
             //normla one-to-one call
+            console.log('call in List', call)
             let allEmp = new employeeServices({});
             employeeModel.find({}, (err, res) => {
                 if (err) callback(err)
@@ -34,24 +36,38 @@ function allServices() {
 
         Watch(call) {
             let allEmp = new employeeServices({});
-            employeeModel.find({}, (err, res) => {
-                //console.log('res',res)
-                if (err) call.write(err)
+            const token = call.metadata._internal_repr['custom-header-1'][0];
+            jwt.verify(token, process.env.SECRET, (err, decoded)=>{
+                console.log('decoded',decoded)
+                if(err) {
+                    call.write({
+                        code: 400,
+                        message: "You are not logged in",
+                        status: grpc.status.UNAUTHENTICATED
+                    })
+                    call.end()
+                }else{
+                    console.log('here?')
+                    employeeModel.find({}, (err, res) => {
+                        //console.log('res',res)
+                        if (err) call.write(err)
 
-                call.write({employees: res})
-            })
+                        call.write({employees: res})
+                    })
 
-            bookStream.on('new_emp', (res) => {
-                let newEmp = new employeeServices(res);
-                employeeModel.find({}, (err, res) => {
+                    bookStream.on('new_emp', (res) => {
+                        let newEmp = new employeeServices(res);
+                        employeeModel.find({}, (err, res) => {
 
-                    if (err) call.write(err);
-                    call.write({employees: res});
-                })
-                /*.then(() => {
-                                    call.end();
-                                })*/
+                            if (err) call.write(err);
+                            call.write({employees: res});
+                        })
+                        /*.then(() => {
+                                            call.end();
+                                        })*/
 
+                    })
+                }
             })
         },
 

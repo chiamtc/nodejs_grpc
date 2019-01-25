@@ -5,6 +5,12 @@ Mongoose.connect('mongodb://localhost/grpc');
 const employeeService = require('./employee_service');
 const userService = require('./user_service');
 //define the callable methods that correspond to the methods defined in the protofile
+
+function preHook(context,call){
+    console.log('context',context)
+    console.log('call',call)
+}
+
 function getServer() {
     const server = new grpc.Server();
     server.addService(employeeService.employeeService().protoService, employeeService.employeeService().services);

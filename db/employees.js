@@ -23,7 +23,6 @@ let Employee = class {
                 cb.write(res)
             })
         });*/
-
     }
 
     update(cb){

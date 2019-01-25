@@ -15,7 +15,6 @@ var packageDefinition = protoLoader.loadSync(
         oneofs: true
     });
 const proto = grpc.loadPackageDefinition(packageDefinition).users;
-
 var bookStream = new events.EventEmitter();
 
 function allServices() {
@@ -32,8 +31,8 @@ function allServices() {
                 } else {
                     const meta = new grpc.Metadata();
                     const token = jwt.sign({user: res}, process.env.SECRET, {expiresIn: 7200});
-                    /* meta.add('token', token);
-                     call.sendMetadata(meta)*/
+                     meta.add('token', token);
+                     call.sendMetadata(meta)
                     callback(null, {token})
                 }
             })

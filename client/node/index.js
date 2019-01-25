@@ -1,3 +1,5 @@
+const intercept = require("grpc/src/client_interceptors");
+
 const grpc = require('grpc');
 const path = require('path')
 const protoPath = require('path').join(__dirname, '../..', 'proto');
@@ -29,6 +31,7 @@ const userProto = grpc.loadPackageDefinition(packageDefinitionUser).users;
 
 
 var loginStream = new event.EventEmitter();
+var clientStream = new event.EventEmitter();
 //Create a new client instance that binds to the IP and port of the grpc server.
 
 //1. ? src: https://grpc.io/docs/guides/auth.html#with-server-authentication-ssltls-6
@@ -58,7 +61,6 @@ var loginin = userClient.login({email: 'test@test.com', password: '1234'}, (erro
 })
 
 loginin.on('metadata', (data) => {
-    //console.log('metadata',data._internal_repr.token[0])
     loginStream.emit('watch_login', data._internal_repr.token[0])
 })
 
@@ -66,7 +68,7 @@ loginStream.on('watch_login', (res) => {
     var meta = new grpc.Metadata();
     meta.add('token', res)
     userClient.watchSession({}, meta, (err, res) => {
-        console.log('watch res', res)
+        clientStream.emit('watch_client', res)
     })
 })
 
@@ -138,13 +140,17 @@ watch.on('data', function (newly) {
 })
 */
 
+clientStream.on('watch_client',(res)=>{
 
-/*
-client.List({}, (err,res)=>{
-    console.log('err',err)
-    console.log('res',res)
-});
-*/
+    var meta2 = new grpc.Metadata();
+
+    meta2.add('something',res.token)
+    client.List({}, {}, (err, res) => {
+        console.log('err', err)
+        console.log('res', res)
+    });
+})
+
 
 /*setTimeout(()=>{
 client.Insert({
