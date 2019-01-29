@@ -4,7 +4,7 @@
 
 
 ## Prerequisite:
-1. Install nodejs https://nodejs.org/en/
+1. Install nodejs https://nodejs.org/en/ please have node version 8.11 or above as I use es6 syntaxes.
 2. Install mongodb
    - #### Windows: https://docs.mongodb.com/v3.2/tutorial/install-mongodb-on-windows/
    - #### Mac: https://docs.mongodb.com/v3.2/tutorial/install-mongodb-on-os-x/
