@@ -27,3 +27,6 @@
 * in `client/browser/**` directory, refers to nodejs_grpc_react repo https://github.com/kuraby1389/nodejs_grpc_react instruction
   
 To check mongodb records, launch mongo service in terminal and `show dbs` and you should have `grpc` collection and inside you will have `employees` and `users` documents (in nosql terms)
+
+
+Open issue in this repo if you have any questions.
