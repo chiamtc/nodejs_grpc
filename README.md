@@ -4,8 +4,8 @@
 
 #### Follow the given below steps to access full working code : 
 
-* Clone this repo : https://github.com/amulyakashyap09/nodejs_grpc.git
-  * ``` git clone https://github.com/amulyakashyap09/nodejs_grpc.git```
+* Clone this repo : https://github.com/kuraby1389/nodejs_grpc.git
+  * ``` git clone https://github.com/kuraby1389/nodejs_grpc.git```
 * change the directory to nodejs_grpc
   * ``` cd nodejs_grpc ```
 * RUN ```npm install```
