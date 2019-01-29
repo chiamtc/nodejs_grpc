@@ -21,8 +21,8 @@
 * RUN ```npm install```
 * RUN ```npm rebuild```
 * Now, start server [server-side] [terminal 1]
-  * ```SECRET=secret node server/index.js```
+  * ```node server/index.js```
 * Now, execute client stub [client-client] [terminal 2]
   * ``` node client/node/index.js ```
   
-To check mongodb records, launch mongo service in terminal and `show dbs` and you should have `grpc` collection and inside you will have employees and users tables
+To check mongodb records, launch mongo service in terminal and `show dbs` and you should have `grpc` collection and inside you will have `employees` and `users` documents (in nosql terms)
