@@ -52,8 +52,8 @@ const userClient = new userProto.Users('localhost:8080', grpc.credentials.create
 
 
 userClient.register({email: 'test@test.com', password:'1234'},(error,response)=>{
-    console.log('err',error)
-    console.log('res',response)
+    console.log('err login',error)
+    console.log('res login',response)
 })
 var loginin = userClient.login({email: 'test@test.com', password: '1234'}, (error, response) => {
 
@@ -146,8 +146,8 @@ clientStream.on('watch_client',(res)=>{
 
     meta2.add('something',res.token)
     client.List({}, {}, (err, res) => {
-        console.log('err', err)
-        console.log('list res', res)
+        console.log('err list', err)
+        console.log('res list ', res)
     });
 })
 
@@ -161,10 +161,10 @@ client.Insert({
     if (
         !error
     ) {
-        console.log("Create emp Response : ", response)
+        console.log("Response created: ", response)
     }
     else {
-        console.log("Error:", error);
+        console.log("Error created:", error);
     }
 });
 },5000);
