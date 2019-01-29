@@ -51,10 +51,10 @@ const client = new proto.Employees('localhost:8080', grpc.credentials.createInse
 const userClient = new userProto.Users('localhost:8080', grpc.credentials.createInsecure());
 
 
-/*userClient.register({email: 'test@test.com', password:'1234'},(error,response)=>{
+userClient.register({email: 'test@test.com', password:'1234'},(error,response)=>{
     console.log('err',error)
     console.log('res',response)
-})*/
+})
 var loginin = userClient.login({email: 'test@test.com', password: '1234'}, (error, response) => {
 
 
@@ -152,7 +152,7 @@ clientStream.on('watch_client',(res)=>{
 })
 
 
-/*setTimeout(()=>{
+setTimeout(()=>{
 client.Insert({
     employee_id: parseInt(Math.random() * 1000000),
     name: "tat cheng",
@@ -167,6 +167,6 @@ client.Insert({
         console.log("Error:", error);
     }
 });
-},5000);*/
+},5000);
 
 
