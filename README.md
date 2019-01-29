@@ -24,5 +24,6 @@
   * ```node server/index.js```
 * Now, execute client stub [client-client] [terminal 2]
   * ``` node client/node/index.js ```
+* in `client/browser/**` directory, refers to nodejs_grpc_react repo https://github.com/kuraby1389/nodejs_grpc_react instruction
   
 To check mongodb records, launch mongo service in terminal and `show dbs` and you should have `grpc` collection and inside you will have `employees` and `users` documents (in nosql terms)
