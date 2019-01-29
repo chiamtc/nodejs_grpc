@@ -147,7 +147,7 @@ clientStream.on('watch_client',(res)=>{
     meta2.add('something',res.token)
     client.List({}, {}, (err, res) => {
         console.log('err', err)
-        console.log('res', res)
+        console.log('list res', res)
     });
 })
 
@@ -161,7 +161,7 @@ client.Insert({
     if (
         !error
     ) {
-        console.log("Response : ", response)
+        console.log("Create emp Response : ", response)
     }
     else {
         console.log("Error:", error);
