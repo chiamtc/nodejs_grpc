@@ -33,6 +33,6 @@ Open issue in this repo if you have any questions.
 
 
 ## Exploration
-1. Other languages are supported by grpc as well https://grpc.io/docs/ , all the protocol buffer contract is in `nodejs_grpc/proto/*.proto` and implement your own client stub in the language you familiar with.
+1. Other languages are supported by grpc as well https://grpc.io/docs/ , all the protocol buffer contract is in `nodejs_grpc/proto/*.proto` and implement your own client stub in the language you familiar with the contract protocol buffer.
 
 I've only implemented Nodejs client stub (really nothing) and Web app (react) which uses Envoy as proxy to access/use service (It's a bit of work to use `protoc` cli to get `.js` script, long story short, docs: https://grpc.io/docs/tutorials/basic/web.html )
